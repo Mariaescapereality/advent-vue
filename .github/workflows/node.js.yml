@@ -53,12 +53,12 @@ jobs:
         run: |
           echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10i" >> frontend/.env.production
 
-      # 8. Build the frontend
-      - name: Build frontend
+      # 8. Install frontend dependencies and build
+      - name: Install frontend dependencies and build
         run: |
           cd frontend
           npm install
-          npm run build
+          npx vue-cli-service build  # Use npx to run the vue-cli-service
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend to backend
