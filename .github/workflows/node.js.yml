@@ -51,7 +51,7 @@ jobs:
       # 7. Configure API URL for production
       - name: Configure API URL
         run: |
-          echo "VUE_APP_API_URL=https://your-backend-url/api" >> frontend/.env.production
+          echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10i" >> frontend/.env.production
 
       # 8. Build the frontend
       - name: Build frontend
