@@ -30,7 +30,11 @@ jobs:
       - name: Set NODE_ENV to production
         run: echo "NODE_ENV=production" >> $GITHUB_ENV
 
-      # 5. Configure environment variables
+      # 5. Install FTP utilities
+      - name: Install FTP utilities
+        run: sudo apt-get install lftp
+
+      # 6. Configure environment variables
       - name: Configure database and server environment variables
         run: |
           echo "FTP_USERNAME=${{ secrets.FTP_USERNAME }}" >> $GITHUB_ENV
@@ -44,24 +48,24 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
 
-      # 6. Configure API URL for production
+      # 7. Configure API URL for production
       - name: Configure API URL
         run: |
           echo "VUE_APP_API_URL=https://your-backend-url/api" >> frontend/.env.production
 
-      # 7. Build the frontend
+      # 8. Build the frontend
       - name: Build frontend
         run: |
           cd frontend
           npm install
           npm run build
 
-      # 8. Move frontend build to backend's public folder
+      # 9. Move frontend build to backend's public folder
       - name: Move frontend to backend
         run: |
           cp -r frontend/dist/* backend/public/
 
-      # 9. Deploy backend to FTP server
+      # 10. Deploy backend to FTP server
       - name: Deploy backend to FTP
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
@@ -71,9 +75,7 @@ jobs:
           local-dir: backend
           server-dir: /public_html/backend
 
-      # 10. Test deployment
+      # 11. Test deployment
       - name: Test Deployment
         run: |
           echo "Deployment complete. Please verify the site is live."
-
-
