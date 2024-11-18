@@ -51,7 +51,7 @@ jobs:
       # 7. Configure API URL for production
       - name: Configure API URL
         run: |
-          echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10i" >> frontend/.env.production
+          echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10" >> frontend/.env.production
 
       # 8. Install frontend dependencies and build
       - name: Install frontend dependencies and build
@@ -78,5 +78,5 @@ jobs:
       # 11. Test deployment
       - name: Test Deployment
         run: |
-          curl -I https://01-web.formation-adapeco-sofip.com
+          curl -I https://01-web.formation-adapeco-sofip.com/10
 
