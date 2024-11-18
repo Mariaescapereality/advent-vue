@@ -61,7 +61,6 @@ jobs:
           npm install --save-dev @vue/cli-service  # Install the Vue CLI service
           npm run build
 
-
       # 9. Move frontend build to backend's public folder
       - name: Move frontend to backend
         run: |
@@ -75,9 +74,9 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: backend
-          server-dir: /public_html/backend
 
       # 11. Test deployment
       - name: Test Deployment
         run: |
-          echo "Deployment complete. Please verify the site is live."
+          curl -I https://01-web.formation-adapeco-sofip.com
+
