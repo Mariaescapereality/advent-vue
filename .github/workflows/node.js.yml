@@ -58,8 +58,9 @@ jobs:
         run: |
           cd frontend
           npm install
-          npm install --save-dev @vue/cli-plugin-babel  # Explicitly install missing Vue CLI plugin
-          npx vue-cli-service build
+          npm install --save-dev @vue/cli-service  # Install the Vue CLI service
+          npm run build
+
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend to backend
