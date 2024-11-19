@@ -1,67 +1,46 @@
-name: CI/CD Deployment
+name: Deploy to Railway
 
 on:
   push:
     branches:
-      - main
+      - main  # Trigger deployment on push to the main branch
+  pull_request:
 
 jobs:
-  deploy:
+  build-and-deploy:
+    name: Build and Deploy to Railway
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
-      - name: Checkout repository
+      # Checkout the repository
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      # 2. Install Node.js (use a specified version)
-      - name: Set up Node.js
+      # Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: 18  # Specify the Node.js version
 
-      # 3. Install frontend dependencies
-      - name: Install frontend dependencies
-        run: npm install --include=dev
-        working-directory: frontend
-
-      # 4. Set NODE_ENV to production
-      - name: Set NODE_ENV to production
-        run: echo "NODE_ENV=production" >> $GITHUB_ENV
-
-      # 5. Build the frontend project
-      - name: Build frontend
-        run: npm run build
-        working-directory: frontend
-
-      # 6. Move frontend build to backend's public folder
-      - name: Move frontend build to backend
+      # Install and build the frontend
+      - name: Install and Build Frontend
+        working-directory: ./frontend
         run: |
-          rm -rf backend/public/*
-          mv frontend/dist/* backend/public/
+          npm install
+          npm run build
 
-      # 7. Install FTP utilities
-      - name: Install FTP utilities
-        run: sudo apt-get install -y lftp
-
-      # 8. Configure environment variables for FTP
-      - name: Configure environment variables
+      # Install and build the backend
+      - name: Install Backend Dependencies
+        working-directory: ./backend
         run: |
-          echo "FTP_USERNAME=${{ secrets.FTP_USERNAME }}" >> $GITHUB_ENV
-          echo "FTP_PASSWORD=${{ secrets.FTP_PASSWORD }}" >> $GITHUB_ENV
-          echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> $GITHUB_ENV
-          echo "SERVER_USERNAME=${{ secrets.SERVER_USERNAME }}" >> $GITHUB_ENV
-          echo "SERVER_PASSWORD=${{ secrets.SERVER_PASSWORD }}" >> $GITHUB_ENV
+          npm install
 
-      # 9. Deploy backend to FTP server
-      - name: Deploy backend to FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      # Deploy to Railway
+      - name: Deploy to Railway
+        uses: railwayapp/railway-action@v2
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: backend
+          projectId: ${{ secrets.RAILWAY_PROJECT_ID }}
+          environment: production  # Change to your Railway environment name if needed
+        env:
+          RAILWAY_API_TOKEN: ${{ secrets.RAILWAY_API_TOKEN }}
 
-      # 10. Test deployment
-      - name: Test Deployment
-        run: curl -I https://01-web.formation-adapeco-sofip.com/10
