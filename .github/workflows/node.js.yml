@@ -14,61 +14,46 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Install Node.js (upgrade to a more recent version)
+      # 2. Install Node.js (use a specified version)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  # Updated to v16 for better compatibility
+          node-version: '20'
 
-      # 3. Install backend dependencies
-      - name: Install backend dependencies
-        run: |
-          cd backend
-          npm install
+      # 3. Install frontend dependencies
+      - name: Install frontend dependencies
+        run: npm install --include=dev
+        working-directory: frontend
 
       # 4. Set NODE_ENV to production
       - name: Set NODE_ENV to production
         run: echo "NODE_ENV=production" >> $GITHUB_ENV
 
-      # 5. Install FTP utilities
-      - name: Install FTP utilities
-        run: sudo apt-get install lftp
+      # 5. Build the frontend project
+      - name: Build frontend
+        run: npm run build
+        working-directory: frontend
 
-      # 6. Configure environment variables
-      - name: Configure database and server environment variables
+      # 6. Move frontend build to backend's public folder
+      - name: Move frontend build to backend
+        run: |
+          rm -rf backend/public/*
+          mv frontend/dist/* backend/public/
+
+      # 7. Install FTP utilities
+      - name: Install FTP utilities
+        run: sudo apt-get install -y lftp
+
+      # 8. Configure environment variables for FTP
+      - name: Configure environment variables
         run: |
           echo "FTP_USERNAME=${{ secrets.FTP_USERNAME }}" >> $GITHUB_ENV
           echo "FTP_PASSWORD=${{ secrets.FTP_PASSWORD }}" >> $GITHUB_ENV
           echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> $GITHUB_ENV
           echo "SERVER_USERNAME=${{ secrets.SERVER_USERNAME }}" >> $GITHUB_ENV
           echo "SERVER_PASSWORD=${{ secrets.SERVER_PASSWORD }}" >> $GITHUB_ENV
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
-          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
 
-      # 7. Configure API URL for production
-      - name: Configure API URL
-        run: |
-          echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10" >> frontend/.env.production
-
-      # 8. Install frontend dependencies and build
-      - name: Install frontend dependencies and build
-        run: |
-          cd frontend
-          npm init -y
-          npm run serve
-          npm run serve-public
-          npm run add-babel
-          npm run build
-
-      # 9. Move frontend build to backend's public folder
-      - name: Move frontend build to backend
-        run: |
-          mv frontend/dist/* backend/public/
-
-      # 10. Deploy backend to FTP server
+      # 9. Deploy backend to FTP server
       - name: Deploy backend to FTP
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
@@ -77,9 +62,6 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: backend
 
-      # 11. Test deployment
+      # 10. Test deployment
       - name: Test Deployment
-        run: |
-          curl -I https://01-web.formation-adapeco-sofip.com/10
-
-
+        run: curl -I https://01-web.formation-adapeco-sofip.com/10
