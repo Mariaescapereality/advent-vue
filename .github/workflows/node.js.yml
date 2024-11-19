@@ -61,8 +61,8 @@ jobs:
       - name: Install frontend dependencies and build
         run: |
           cd frontend
-          npm install  # Ensure all dependencies, including vue-cli-service, are installed locally
-          npx vue-cli-service build  # Use npx to run the local vue-cli-service
+          npm install 
+          npx vue-cli-service build  
 
       # 10. Move frontend build to backend's public folder
       - name: Move frontend build to backend
