@@ -62,7 +62,7 @@ jobs:
         run: |
           cd frontend
           npm install 
-          npx vue-cli-service build  
+          npm run dev
 
       # 10. Move frontend build to backend's public folder
       - name: Move frontend build to backend
