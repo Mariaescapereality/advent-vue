@@ -61,7 +61,7 @@ jobs:
           npm run build
           npm run serve
           npm run serve-public
-          npm run add-babelvue add babel
+          npm run add-babel
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend build to backend
