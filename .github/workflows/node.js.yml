@@ -14,11 +14,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2. Install Node.js
+      # 2. Install Node.js (upgrade to a more recent version)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '10'
+          node-version: '16'  # Updated to v16 for better compatibility
 
       # 3. Install backend dependencies
       - name: Install backend dependencies
@@ -53,23 +53,21 @@ jobs:
         run: |
           echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10" >> frontend/.env.production
 
-      # 8. Verify the frontend directory exists
-      - name: Verify frontend directory
-        run: ls -alh
-
-      # 9. Install frontend dependencies and build
+      # 8. Install frontend dependencies and build
       - name: Install frontend dependencies and build
         run: |
           cd frontend
-          npm install --save-dev @vue/cli-service
-          npm run dev
+          npm install  
+          npx vue-cli-service build
+          npx vue-cli-service serve
+          vue-cli-service serve --public
 
-      # 10. Move frontend build to backend's public folder
+      # 9. Move frontend build to backend's public folder
       - name: Move frontend build to backend
         run: |
           mv frontend/dist/* backend/public/
 
-      # 11. Deploy backend to FTP server
+      # 10. Deploy backend to FTP server
       - name: Deploy backend to FTP
         uses: SamKirkland/FTP-Deploy-Action@4.3.0
         with:
@@ -78,8 +76,9 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: backend
 
-      # 12. Test deployment
+      # 11. Test deployment
       - name: Test Deployment
         run: |
           curl -I https://01-web.formation-adapeco-sofip.com/10
+
 
