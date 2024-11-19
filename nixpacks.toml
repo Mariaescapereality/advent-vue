@@ -1,0 +1,9 @@
+[frontend]
+path = "frontend"
+builder = "nodejs"
+start = "npm start"
+
+[backend]
+path = "backend"
+builder = "nodejs"
+start = "npm start"
