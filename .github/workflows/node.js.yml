@@ -64,8 +64,6 @@ jobs:
           cd frontend
           npm ci
           npx vue-cli-service build
-          npm audit fix
-          npm audit fix --force
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend build to backend
