@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '10'
+          node-version: '20'
 
       # 3. Install backend dependencies
       - name: Install backend dependencies
@@ -61,12 +61,8 @@ jobs:
       - name: Install frontend dependencies and build
         run: |
           cd frontend
-          npm uninstall -g @vue/cli
-          npm i @vue/cli
-          npm install
-          npm install -g @vue/cli
-          npm ci
-          npx vue-cli-service build
+          npm install  # Ensure all dependencies are installed locally
+          npx vue-cli-service build  # Use npx to run the local vue-cli-service
 
       # 10. Move frontend build to backend's public folder
       - name: Move frontend build to backend
@@ -86,3 +82,4 @@ jobs:
       - name: Test Deployment
         run: |
           curl -I https://01-web.formation-adapeco-sofip.com/10
+
