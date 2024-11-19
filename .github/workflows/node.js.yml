@@ -61,6 +61,7 @@ jobs:
           npx vue-cli-service build
           npx vue-cli-service serve
           vue-cli-service serve --public
+          vue add babel
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend build to backend
