@@ -58,6 +58,8 @@ jobs:
         run: |
           cd frontend
           npm uninstall -g @vue/cli
+          npm i @vue/cli
+          npm install
           npm install -g @vue/cli
           npm run build
 
