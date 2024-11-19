@@ -61,8 +61,8 @@ jobs:
       - name: Install frontend dependencies and build
         run: |
           cd frontend
-          npm install 
-          npm run serve
+          npm install --save-dev @vue/cli-service
+          npm run dev
 
       # 10. Move frontend build to backend's public folder
       - name: Move frontend build to backend
