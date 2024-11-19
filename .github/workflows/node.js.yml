@@ -57,20 +57,18 @@ jobs:
       - name: Install frontend dependencies and build
         run: |
           cd frontend
-          npm uninstall -g @vue/cli
-          npm i @vue/cli
           npm install
+          npm uninstall -g @vue/cli
           npm install -g @vue/cli
-          cd frontend
           npm ci
           npm run build
           npm audit fix
           npm audit fix --force
 
       # 9. Move frontend build to backend's public folder
-      - name: Move frontend to backend
+      - name: Move frontend build to backend
         run: |
-          cd dist
+          mv frontend/dist/* backend/public/
 
       # 10. Deploy backend to FTP server
       - name: Deploy backend to FTP
@@ -85,5 +83,6 @@ jobs:
       - name: Test Deployment
         run: |
           curl -I https://01-web.formation-adapeco-sofip.com/10
+
 
 
