@@ -57,11 +57,11 @@ jobs:
       - name: Install frontend dependencies and build
         run: |
           cd frontend
-          npm install  
-          npx vue-cli-service build
-          npx vue-cli-service serve
-          vue-cli-service serve --public
-          vue add babel
+          npm init -y
+          npm run build
+          npm run serve
+          npm run serve-public
+          npm run add-babelvue add babel
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend build to backend
