@@ -57,10 +57,13 @@ jobs:
       - name: Install frontend dependencies and build
         run: |
           cd frontend
+          npm uninstall -g @vue/cli
+          npm i @vue/cli
           npm install
+          npm install -g @vue/cli
+          cd frontend
           npm ci
-          # Ensure vue-cli-service is available in node_modules/.bin
-          ./node_modules/.bin/vue-cli-service build
+          npx vue-cli-service build
           npm audit fix
           npm audit fix --force
 
