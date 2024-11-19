@@ -51,21 +51,14 @@ jobs:
       # 7. Configure API URL for production
       - name: Configure API URL
         run: |
-          echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10" >> frontend/.env.production
+          echo "VITE_API_URL=https://01-web.formation-adapeco-sofip.com/10" >> frontend/.env.production
 
-      # 8. Install frontend dependencies and build
+      # 8. Install frontend dependencies and build with Vite
       - name: Install frontend dependencies and build
         run: |
           cd frontend
-          npm uninstall -g @vue/cli
-          npm i @vue/cli
           npm install
-          npm install -g @vue/cli
-          cd frontend
-          npm ci
-          npx vue-cli-service build
-          npm audit fix
-          npm audit fix --force
+          npm run build
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend to backend
@@ -85,4 +78,3 @@ jobs:
       - name: Test Deployment
         run: |
           curl -I https://01-web.formation-adapeco-sofip.com/10
-
