@@ -63,14 +63,14 @@ jobs:
           npm install -g @vue/cli
           cd frontend
           npm ci
-          npx vue-cli-service build
+          npm run build
           npm audit fix
           npm audit fix --force
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend to backend
         run: |
-          dist/
+          cd dist
 
       # 10. Deploy backend to FTP server
       - name: Deploy backend to FTP
