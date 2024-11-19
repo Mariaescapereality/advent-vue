@@ -1,4 +1,16 @@
-deploy:
+name: CI/CD Deployment
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,63 +31,7 @@ deploy:
           npm install
 
       # 4. Set NODE_ENV to production
-      - name: Set NODE_ENV to production
-        run: echo "NODE_ENV=production" >> $GITHUB_ENV
+      - name:
 
-      # 5. Install FTP utilities
-      - name: Install FTP utilities
-        run: sudo apt-get install lftp
-
-      # 6. Configure environment variables
-      - name: Configure database and server environment variables
-        run: |
-          echo "FTP_USERNAME=${{ secrets.FTP_USERNAME }}" >> $GITHUB_ENV
-          echo "FTP_PASSWORD=${{ secrets.FTP_PASSWORD }}" >> $GITHUB_ENV
-          echo "SERVER_HOST=${{ secrets.SERVER_HOST }}" >> $GITHUB_ENV
-          echo "SERVER_USERNAME=${{ secrets.SERVER_USERNAME }}" >> $GITHUB_ENV
-          echo "SERVER_PASSWORD=${{ secrets.SERVER_PASSWORD }}" >> $GITHUB_ENV
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> $GITHUB_ENV
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> $GITHUB_ENV
-          echo "DB_USER=${{ secrets.DB_USER }}" >> $GITHUB_ENV
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> $GITHUB_ENV
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> $GITHUB_ENV
-
-      # 7. Configure API URL for production
-      - name: Configure API URL
-        run: |
-          echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10" >> frontend/.env.production
-
-      # 8. Install frontend dependencies and build
-      - name: Install frontend dependencies and build
-        run: |
-          cd frontend
-          npm uninstall -g @vue/cli
-          npm i @vue/cli
-          npm install
-          npm install -g @vue/cli
-          cd frontend
-          npm ci
-          npx vue-cli-service build
-          npm audit fix
-          npm audit fix --force
-
-      # 9. Move frontend build to backend's public folder
-      - name: Move frontend to backend
-        run: |
-          cp -r frontend/dist/* backend/public/
-
-      # 10. Deploy backend to FTP server
-      - name: Deploy backend to FTP
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: backend
-
-      # 11. Test deployment
-      - name: Test Deployment
-        run: |
-          curl -I https://01-web.formation-adapeco-sofip.com/10
 
 
