@@ -1,12 +1,4 @@
-name: CI/CD Deployment
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  deploy:
+deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -51,14 +43,21 @@ jobs:
       # 7. Configure API URL for production
       - name: Configure API URL
         run: |
-          echo "VITE_API_URL=https://01-web.formation-adapeco-sofip.com/10" >> frontend/.env.production
+          echo "VUE_APP_API_URL=https://01-web.formation-adapeco-sofip.com/10" >> frontend/.env.production
 
-      # 8. Install frontend dependencies and build with Vite
+      # 8. Install frontend dependencies and build
       - name: Install frontend dependencies and build
         run: |
           cd frontend
+          npm uninstall -g @vue/cli
+          npm i @vue/cli
           npm install
-          npm run build
+          npm install -g @vue/cli
+          cd frontend
+          npm ci
+          npx vue-cli-service build
+          npm audit fix
+          npm audit fix --force
 
       # 9. Move frontend build to backend's public folder
       - name: Move frontend to backend
@@ -78,3 +77,5 @@ jobs:
       - name: Test Deployment
         run: |
           curl -I https://01-web.formation-adapeco-sofip.com/10
+
+
