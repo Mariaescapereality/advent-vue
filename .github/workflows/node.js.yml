@@ -3,7 +3,7 @@ name: Deploy to Railway
 on:
   push:
     branches:
-      - main  # Trigger deployment on push to the main branch
+      - main  
   pull_request:
 
 jobs:
