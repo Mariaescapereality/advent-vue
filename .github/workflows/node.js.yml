@@ -70,7 +70,7 @@ jobs:
       # 9. Move frontend build to backend's public folder
       - name: Move frontend to backend
         run: |
-          cp -r frontend/dist/* frontend/public/
+          cp -r frontend dist/frontend/public/
 
       # 10. Deploy backend to FTP server
       - name: Deploy backend to FTP
