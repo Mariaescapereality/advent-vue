@@ -31,9 +31,9 @@ jobs:
         run: npm install
 
       # Step 4: Run tests
-      - name: Run frontend tests
+      - name: run test
         working-directory: frontend
-        run: npm run test
+        run: npm run test:unit
 
       # Step 5: Lint code
       - name: Lint frontend
