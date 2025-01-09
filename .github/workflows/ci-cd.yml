@@ -22,10 +22,6 @@ jobs:
           node-version: 18
 
       # Step 3: Install dependencies
-      - name: Install backend dependencies
-        working-directory: backend
-        run: npm install
-
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm install
