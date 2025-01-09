@@ -23,21 +23,17 @@ jobs:
 
       # Step 3: Install dependencies
       - name: Install frontend dependencies
-        working-directory: frontend
         run: npm install
 
       # Step 4: Run tests
       - name: run test
-        working-directory: frontend
         run: npm run test:unit
 
       # Step 5: Lint code
       - name: Lint frontend
-        working-directory: frontend
         run: npm run lint
 
       # Step 6: Build frontend
       - name: Build frontend
-        working-directory: frontend
         run: npm run build
 
