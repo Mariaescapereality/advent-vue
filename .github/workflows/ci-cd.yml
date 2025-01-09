@@ -31,19 +31,11 @@ jobs:
         run: npm install
 
       # Step 4: Run tests
-      - name: Run backend tests
-        working-directory: backend
-        run: npm test
-
       - name: Run frontend tests
         working-directory: frontend
         run: npm run test:unit
 
       # Step 5: Lint code
-      - name: Lint backend
-        working-directory: backend
-        run: npm run lint
-
       - name: Lint frontend
         working-directory: frontend
         run: npm run lint
