@@ -53,19 +53,3 @@ jobs:
         working-directory: frontend
         run: npm run build
 
-      # Step 7: Simulate deployment
-      - name: Simulate deployment
-        run: |
-          mkdir -p deployment/public
-          cp -r frontend/dist/* deployment/public/
-          cp -r backend/* deployment/
-          rm -rf deployment/node_modules
-          zip -r advent-deployment.zip deployment
-        shell: bash
-
-      # Step 8: Upload artifact
-      - name: Upload deployment artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: advent-deployment
-          path: advent-deployment.zip
